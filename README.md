@@ -1,4 +1,4 @@
-![ss_logo](./static/img/ss-icon.png)
+![ss_logo](./static/img/ss-logo.png)
 
 # SigmaShooter
 
