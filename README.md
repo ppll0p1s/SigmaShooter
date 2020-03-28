@@ -1,7 +1,6 @@
 <p align="center">
-  <img src="./static/img/ss-logo.PNG">
+  <img src="./static/img/ss-logo.png">
 </p>
-![ss_logo](./static/img/ss-logo.PNG)
 
 # SigmaShooter
 
