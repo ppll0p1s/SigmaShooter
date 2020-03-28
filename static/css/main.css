@@ -1,0 +1,94 @@
+html, body { font-family: 'Ubuntu', sans-serif; }
+
+textarea { resize:none; }
+
+.navbar-brand {
+    float: left;
+    height: 50px;
+    padding: 10px 0px 15px 15px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.right-spacing { margin-right: 10px; }
+
+.centerize {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.centerize-search {
+    display: block;
+    margin: 0 auto;
+}
+
+.input-group-btn .btn-group {
+    display: flex !important;
+}
+
+.form-inline {
+    display: inline-block;
+}
+
+/* Change results matches color of searching function in jstree */
+.jstree-default a.jstree-search { color:#0080FF; }
+
+/* Needed for pushing the main container down */
+#containerPush { margin-top: 70px; }
+
+/* Tabs */
+#tabList { margin-bottom: 10px; }
+
+/* Create two equal columns that sits next to each other */
+.column {
+  display: flex;
+  flex: 50%;
+  padding: 10px;
+  /* height: 300px; Should be removed. Only for demonstration */
+}
+
+
+/* Tools */
+.navbar .divider-vertical {
+    height: 50px;
+    margin: 0 9px;
+    border-right: 1px solid #ffffff;
+    border-left: 1px solid #f2f2f2;
+}
+
+.navbar-inverse .divider-vertical {
+    border-right-color: #222222;
+    border-left-color: #111111;
+}
+
+/* Loader */
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Colour check connectivity options */
+.checkGreen {
+  color: green;
+}
+
+.checkRed {
+  color: red;
+}

@@ -1,0 +1,65 @@
+#--------------------------------------------------
+#	SigmaShooter SIEM Tips File siemTips.txt
+#
+#	For more information:
+#	TODO: copy github link
+#
+# 	Version - v0.01 - 28/03/2020
+#
+#--------------------------------------------------
+
+###################################################
+# This file contains some SIEM tips to improve SigmaShooter results
+###################################################
+
+###################################################
+# GRAYLOG
+###################################################
+
+==> Add stream parameter in the url path to run the queries (function web/helpers.runRuleQueryToGraylog()). If we do not edit sigma query to specificate in what logs search, we could get bad results with sigma rules composed with only OR conditions.
+
+==> Configure HTTPS in SIEM and send communicate to Graylog via TLS to avoid sending data in clear text.
+
+==> Allow wildcard for sigma queries: 
+
+Change in "server.conf" allow_leading_wildcard_searches variable to true.
+By the default, wildcard is allowed only in fields message, full_message and source.
+
+If you want to enable wildcard to other fields, continue next steps:
+	- Create new template: vim graylog-custom-mapping.json
+	- Configure the new fields: 
+
+# e.g. configuring Channel and Version field
+
+{
+  "template": "graylog_*",
+  "mappings": {
+    "message": {
+      "properties": {
+        "Channel": {
+          "analyzer": "standard",
+          "index": "analyzed",
+          "type": "string"
+        },
+        "Version": {
+          "analyzer": "standard",
+          "index": "analyzed",
+          "type": "string"
+        }
+      }
+    }
+  }
+}
+
+	- Upload new template: curl -X PUT -d @'graylog-custom-mapping.json' 'http://localhost:9200/_template/graylog-custom-mapping?pretty'
+	- Rotate index: from webapp > System > Indices > Default index set > Maintenance > Rotate active write index
+	- From now, new field configured will have wildcard enabled.
+	
+Reference: 
+http://docs.graylog.org/en/2.4/pages/configuration/elasticsearch.html#custom-index-mappings
+
+###################################################
+# Other SIEM
+###################################################
+
+# In Construction...

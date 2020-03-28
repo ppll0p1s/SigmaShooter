@@ -1,0 +1,2 @@
+# Programs required in SigmaShooter server:
+- sigmac
