@@ -31,6 +31,7 @@ If you want to enable wildcard to other fields, continue next steps:
 
 # e.g. configuring Channel and Version field
 
+# versions <3
 {
   "template": "graylog_*",
   "mappings": {
@@ -50,6 +51,28 @@ If you want to enable wildcard to other fields, continue next steps:
     }
   }
 }
+
+# versions >= 3
+{
+  "template": "graylog_*",
+  "mappings": {
+    "message": {
+      "properties": {
+        "Image": {
+          "analyzer": "standard",
+          "fielddata": "false",
+          "type" : "text"
+        },
+        "ParentImage": {
+          "analyzer": "standard",
+          "fielddata": "false",
+          "type" : "text"
+        }
+      }
+    }
+  }
+}
+
 
 	- Upload new template: curl -X PUT -d @'graylog-custom-mapping.json' 'http://localhost:9200/_template/graylog-custom-mapping?pretty'
 	- Rotate index: from webapp > System > Indices > Default index set > Maintenance > Rotate active write index
