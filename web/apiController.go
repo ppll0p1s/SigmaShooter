@@ -182,7 +182,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request){
 	log.Println("Executed: downloadHandler")
 
 	// Create tar.gz with all active rules
-	err = targzit(RulePath,"tmp/","sigmaRules.tar.gz")
+	err := targzit(RulePath,"tmp/","sigmaRules.tar.gz")
 	if err != nil {
 		log.Println("downloadHandler: "+err.Error())
 		return
