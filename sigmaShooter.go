@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -40,8 +41,11 @@ func main() {
 	log.Printf("Starting SigmaShooter server %s", version)
 
 	// Check requirements
-	check := checkRequirements(config)
-	if check != ""{
+	check, repo := checkRequirements(config)
+	if check == "" {
+		log.Println("checkRequirements: checking reqs... OK")
+	} else {
+		fmt.Println("main: checking reqs... FAIL.\nCheck requirements to run the app. \nChecks: " + check)
 	    log.Fatal("main: checking reqs... FAIL.\nCheck requirements to run the app. \nChecks: " + check)
 	} 
 
@@ -52,28 +56,34 @@ func main() {
 	// Set variables for web handler
 	web.RulePath 	= config["rulePath"]
 	web.RuleBakPath = config["ruleBakPath"]
+		
+ 	if repo {
+ 		web.Repo = true
+ 	} else {
 
-	if config["siem"] == "graylog" {
-		web.Version 		= version
-		web.Siem 			= config["siem"]
-		web.SiemAddr 		= config["siemAddr"]
-		web.SiemPortApi 	= config["siemPortApi"]
-		web.SiemUrlApi 		= config["siemUrlApi"]
-		web.SiemToken 		= config["siemToken"]
+		if config["siem"] == "graylog" {
+			web.Version 		= version
+			web.Siem 			= config["siem"]
+			web.SiemAddr 		= config["siemAddr"]
+			web.SiemPortApi 	= config["siemPortApi"]
+			web.SiemUrlApi 		= config["siemUrlApi"]
+			web.SiemToken 		= config["siemToken"]
 
-		siemPortInputu64, err := strconv.ParseUint(config["siemPortInput"], 10, 64)
-		if err != nil {
-			log.Println("main - SiemPortInput "+err.Error())
+			siemPortInputu64, err := strconv.ParseUint(config["siemPortInput"], 10, 64)
+			if err != nil {
+				log.Println("main - SiemPortInput "+err.Error())
+			}
+			web.SiemPortInput 	= uint(siemPortInputu64)
+
+		} else if config["siem"] == "X" {
+			log.Println("In construction...")
+			os.Exit(3)
+		} else {
+			log.Println("In construction...")
+			os.Exit(3)
 		}
-		web.SiemPortInput 	= uint(siemPortInputu64)
+ 	}
 
-	} else if config["siem"] == "X" {
-		log.Println("In construction...")
-		os.Exit(3)
-	} else {
-		log.Println("In construction...")
-		os.Exit(3)
-	}
 
 	// Start Web router goroutine
 	web.Router(addr, port)
@@ -91,15 +101,16 @@ func ReadConfig(filename string) (Config, error) {
 	config := Config{
 		"addr":					"",
 		"port":           		"",
+		"repo":           		"",
+		"rulePath":      		"",
+		"ruleBakPath":      	"",
+		"logDir":      			"",
 		"siem":          		"",
 		"siemAddr":      		"",
 		"siemPortApi":      	"",
 		"siemUrlApi":      		"",
 		"siemPortInput":      	"",
 		"siemToken":      		"",
-		"rulePath":      		"",
-		"ruleBakPath":      	"",
-		"logDir":      			"",
 	}
 	if len(filename) == 0 {
 		return config, nil
@@ -138,10 +149,11 @@ func ReadConfig(filename string) (Config, error) {
 }
 
 // checkRequirements: check requirements to run the app correctly
-func checkRequirements(config Config) (string) {
+func checkRequirements(config Config) (string, bool) {
 	log.Println("checkRequirements: checking reqs...")
 
 	check := ""
+	repo := false
 
 	// Check requirements.txt
 	// NOTE: Check commands will return errors, but we assume them to check if the command is in the system or not.
@@ -157,27 +169,48 @@ func checkRequirements(config Config) (string) {
 	// Check config vars
 	if config["addr"] == "" {
 		check = check + "ERROR: addr empty value.\n"
-	} else if config["port"] == "" {
+	}
+	if config["port"] == "" {
 		check = check + "ERROR: port empty value.\n"
-	} else if config["siem"] == "" {
-		check = check + "ERROR: siem empty value.\n"
-	} else if config["siemAddr"] == "" {
-		check = check + "ERROR: siemAddr empty value.\n"
-	} else if config["siemPortApi"] == "" {
-		check = check + "ERROR: siemPortApi empty value.\n"
-	} else if config["siemUrlApi"] == "" {
-		check = check + "ERROR: siemUrlApi empty value.\n"
-	} else if config["siemPortInput"] == "" {
-		check = check + "ERROR: siemPortInput empty value.\n"
-	} else if config["siemToken"] == "" {
-		check = check + "ERROR: siemToken empty value.\n"
-	} else if config["rulePath"] == "" {
+	}
+	if config["rulePath"] == "" {
 		check = check + "ERROR: rulePath empty value.\n"
-	} else if config["ruleBakPath"] == "" {
+	} else {
+		if _, err := os.Stat(config["rulePath"]); os.IsNotExist(err) {
+			check = check + "ERROR: rulePath value does not exist. Create it to continue.\n"
+		}
+	}
+	if config["ruleBakPath"] == "" {
 		check = check + "ERROR: ruleBakPath empty value.\n"
-	} //else if config["logDir"] == "" {
-		//check = check + "ERROR: logDir empty value.\n"
-	//}
+	} else {
+		if _, err := os.Stat(config["ruleBakPath"]); os.IsNotExist(err) {
+			check = check + "ERROR: ruleBakPath value does not exist. Create it to continue.\n"
+		}
+	}
+
+	if config["repo"] != "true" {
+		if config["siem"] == "" {
+			check = check + "ERROR: siem empty value.\n"
+		}
+		if config["siemAddr"] == "" {
+			check = check + "ERROR: siemAddr empty value.\n"
+		}
+		if config["siemPortApi"] == "" {
+			check = check + "ERROR: siemPortApi empty value.\n"
+		}
+		if config["siemUrlApi"] == "" {
+			check = check + "ERROR: siemUrlApi empty value.\n"
+		}
+		if config["siemPortInput"] == "" {
+			check = check + "ERROR: siemPortInput empty value.\n"
+		}
+		if config["siemToken"] == "" {
+			check = check + "ERROR: siemToken empty value.\n"
+		}
+	} else {
+		repo = true
+	}
+	
 
 	// Check paths
 	// tmp/ path for tmp files used by the app (p.e. content rule)
@@ -188,21 +221,6 @@ func checkRequirements(config Config) (string) {
 			log.Println("checkRequirements: INFO: tmp/ path created for SigmaShooter App.")
 		}
 	}
-	// rulePath/
-	if _, err := os.Stat(config["rulePath"]); os.IsNotExist(err) {
-		check = check + "ERROR: rulePath value does not exist. Create it to continue.\n"
-	}
-	// ruleBakPath/
-	if _, err := os.Stat(config["ruleBakPath"]); os.IsNotExist(err) {
-		check = check + "ERROR: ruleBakPath value does not exist. Create it to continue.\n"
-	}
-	// logDir/
-	//if _, err := os.Stat(config["logDir"]); os.IsNotExist(err) {
-		//check = "ERROR: logDir value does not exist. Create it to continue.\n"
-	//}
 
-	if check == "" {
-		log.Println("checkRequirements: checking reqs... OK")
-	}
-	return check
+	return check, repo
 }

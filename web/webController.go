@@ -22,8 +22,14 @@ import (
 
 // indexHandler: return the main view without data
 func indexHandler(rw http.ResponseWriter, req *http.Request) {
+	fp := ""
+
 	lp := path.Join("views", "layout.html")
-	fp := path.Join("views", "index.html")
+	if !Repo {
+		fp = path.Join("views", "index.html")
+	} else {
+		fp = path.Join("views", "index-repo.html")
+	}
 
 	tmpl, err := template.ParseFiles(lp, fp)
 	if err != nil {
@@ -74,7 +80,6 @@ func logstosiemHandler(rw http.ResponseWriter, req *http.Request) {
 // getFolderList: get sigma rules folder list, folder's names and rules count inside each folder
 func getFolderList(rw http.ResponseWriter, req *http.Request) {
 	var rulesFolder []string 
-
 	err := filepath.Walk(RulePath,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
@@ -100,13 +105,11 @@ func getFolderList(rw http.ResponseWriter, req *http.Request) {
 
 			return nil
 	})
-
 	if err != nil {
 		log.Println("getFolderList: "+err.Error())
 	}
 
 	var rulesFolderUniq []string
-
 	for i:=0; i<len(rulesFolder); i++ {
 
 		check := false
@@ -141,7 +144,6 @@ func getFolderList(rw http.ResponseWriter, req *http.Request) {
 		FolderName	string 		`json:"folder_name"`
 		RulesNumber	int 		`json:"rules_number"`
 	}
-
 	var rulesfolders []RulesFolder 
 	var rfitem RulesFolder 
 	for i, _ := range rulesFolderUniq {
@@ -153,7 +155,6 @@ func getFolderList(rw http.ResponseWriter, req *http.Request) {
 	// Order by rulesNumber from highest to lower to improve chartTypeRules
 	var rulesfoldersOrder []RulesFolder
 	var itemOrdered RulesFolder
-
 	if len(rulesfolders) == 0{
 		itemOrdered.FolderName = "rules/"
 		itemOrdered.RulesNumber = 0

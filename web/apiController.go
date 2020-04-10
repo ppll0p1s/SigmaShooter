@@ -182,9 +182,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request){
 	log.Println("Executed: downloadHandler")
 
 	// Create tar.gz with all active rules
-	// Not needed to sanitize
-	cmd := exec.Command("tar", "-czf", "sigmaRules.tar.gz", RulePath)
-	err := cmd.Run()
+	err = targzit(RulePath,"tmp/","sigmaRules.tar.gz")
 	if err != nil {
 		log.Println("downloadHandler: "+err.Error())
 		return
@@ -194,7 +192,6 @@ func downloadHandler(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/x-gzip")
 	w.Header().Set("Content-Disposition", "attachment; filename=sigmaRules.tar.gz")
 	http.ServeFile(w, r, "sigmaRules.tar.gz")
-	
 }
 
 

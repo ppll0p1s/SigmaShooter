@@ -8,6 +8,7 @@ import (
 )
 
 // Vars
+var Repo bool
 var Version, Siem, SiemAddr, SiemPortApi, SiemUrlApi, SiemToken, RulePath, RuleBakPath string
 var SiemPortInput uint
 
@@ -32,14 +33,11 @@ func Router(addr, port string) {
 	// New route multiplexer
 	r := mux.NewRouter()
 
-	// Main routes
 	r.HandleFunc("/", indexHandler).Methods("GET")
+	r.HandleFunc("/api/rules/count", rulesCountHandler).Methods("GET")
 	r.HandleFunc("/getFolderList", getFolderList).Methods("GET")
-	r.HandleFunc("/getLastAlertsCountByDay", getLastAlertsCountByDay).Methods("GET")
 	r.HandleFunc("/getJsonRulesTree", getJsonRulesTree).Methods("GET")
 	r.HandleFunc("/uploadEditRule", uploadEditRule).Methods("POST")
-	r.HandleFunc("/getLastExecutionsLogs", getLastExecutionsLogs).Methods("GET")
-	r.HandleFunc("/executionsLog.csv", downloadExecLogs).Methods("GET")
 	r.HandleFunc("/infoEditRule", infoEditRule).Methods("POST")
 	r.HandleFunc("/editRule", editRule).Methods("POST")
 	r.HandleFunc("/newNodeName", newNodeName).Methods("POST")
@@ -47,26 +45,35 @@ func Router(addr, port string) {
 	r.HandleFunc("/addFolder", addFolder).Methods("POST")
 	r.HandleFunc("/addRule", getPathToAddRule).Methods("POST")
 	r.HandleFunc("/getRootRulePath", getRootRulePath).Methods("GET")
-
-	// API Routes
-	r.HandleFunc("/api/checkConn", checkConn).Methods("GET")
 	r.HandleFunc("/api/upload", uploadHandler).Methods("POST")
 	r.HandleFunc("/api/uploadSingleRule", uploadSingleRuleHandler).Methods("POST")
 	r.HandleFunc("/api/download", downloadHandler).Methods("GET")
 	r.HandleFunc("/api/deleteRule", deleteRuleHandler).Methods("POST")
 	r.HandleFunc("/api/delete", deleteHandler).Methods("GET")
-	r.HandleFunc("/api/runRule/{days:[0-9]+}", runRule).Methods("POST")
-	r.HandleFunc("/api/runAllRules/{days:[0-9]+}", runAllRules).Methods("GET")
 	r.HandleFunc("/api/rules/count", rulesCountHandler).Methods("GET")
-	r.HandleFunc("/api/testRules", testRulesHandler).Methods("GET")
-	r.HandleFunc("/api/testRuleFile", testRuleFileHandler).Methods("POST")
-	r.HandleFunc("/api/testRuleManual", testRuleManualHandler).Methods("POST")
 
-	// Uploading Logs to SIEM
-	r.HandleFunc("/logstosiem", logstosiemHandler).Methods("GET")
-	r.HandleFunc("/api/uploadWinToSiemAndRun", uploadWinToSiemAndRun).Methods("POST")
-	r.HandleFunc("/getLastFilesUploadedLogs", getLastFilesUploadedLogs).Methods("GET")
-	r.HandleFunc("/logFileUploaded.csv", downloadFileUploadedLogs).Methods("GET")
+
+	// If repo mode is not enabled, run rest
+	if !Repo {
+		r.HandleFunc("/getLastAlertsCountByDay", getLastAlertsCountByDay).Methods("GET")
+		r.HandleFunc("/getLastExecutionsLogs", getLastExecutionsLogs).Methods("GET")
+		r.HandleFunc("/executionsLog.csv", downloadExecLogs).Methods("GET")
+		r.HandleFunc("/api/checkConn", checkConn).Methods("GET")
+		r.HandleFunc("/api/runRule/{days:[0-9]+}", runRule).Methods("POST")
+		r.HandleFunc("/api/runAllRules/{days:[0-9]+}", runAllRules).Methods("GET")
+		r.HandleFunc("/api/testRules", testRulesHandler).Methods("GET")
+		r.HandleFunc("/api/testRuleFile", testRuleFileHandler).Methods("POST")
+		r.HandleFunc("/api/testRuleManual", testRuleManualHandler).Methods("POST")
+
+		// Uploading Logs to SIEM
+		r.HandleFunc("/logstosiem", logstosiemHandler).Methods("GET")
+		r.HandleFunc("/api/uploadWinToSiemAndRun", uploadWinToSiemAndRun).Methods("POST")
+		r.HandleFunc("/getLastFilesUploadedLogs", getLastFilesUploadedLogs).Methods("GET")
+		r.HandleFunc("/logFileUploaded.csv", downloadFileUploadedLogs).Methods("GET")
+	}
+
+
+
 
 
 	// Serve static files
