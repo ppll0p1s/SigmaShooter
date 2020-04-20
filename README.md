@@ -4,7 +4,7 @@
 
 # SigmaShooter
 
-Shooter of Sigma rules to SIEM systems.
+Shooter of Sigma rules to SIEM systems, Graylog in this first version.
 
 # What is SigmaShooter
 
@@ -54,6 +54,18 @@ $ ./sigmaShooter
 * Sigma rules Conversion using sigmac and Execution to SIEM. (Graylog in this first version.)
 * Alert Generation on SIEM configured. (Graylog in this first version.)
 * Upload logs to SIEM option and Run Sigma rules to these logs from "Upload Logs" tab. (Windows Events Logs and Graylog in this first version.)
-* API available to automate the follow tasks:
-   `/api/rules/count` : Get rules number
-⋅⋅⋅`/api/rules/count` : Get rules number
+* API available to automate tasks. Options available list in the next section.
+
+## API
+
+  `/api/checkConn`              - GET : Return SIEM Connectivity state from the app
+  `/api/upload`                 - POST : Upload Sigma rules from .tar.gz
+  `/api/uploadSingleRule`       - POST : Upload Sigma rule from .yml
+  `/api/download`               - GET : Download Sigma rules loaded in .tar.gz
+  `/api/delete`                 - GET : Delete All sigma rules
+  `/api/deleteRule`             - POST : Delete Sigma rule from id
+  `/api/runRule/{days:int}`     - POST : Run Sigma rule from id
+  `/api/runRule/{days:int}`     - GET : Run All Sigma rules
+  `/api/testRules`              - GET : Test Sigma rules
+  `/api/uploadWinToSiemAndRun`  - POST : Upload Windows Event Logs and Run Sigma rules to them
+
