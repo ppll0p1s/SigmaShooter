@@ -4,11 +4,11 @@
 
 # SigmaShooter
 
-Shooter of Sigma rules to SIEM systems, Graylog in this first version.
+Shooter of [Sigma](https://github.com/Neo23x0/sigma) rules to SIEM systems, Graylog in this first version.
 
 # What is SigmaShooter
 
-SigmaShooter is a repository web app to manage and run Sigma rules against SIEM systems. 
+SigmaShooter is a repository web app to manage and run [Sigma](https://github.com/Neo23x0/sigma) rules against SIEM systems. 
 
 <p align="center">
   <img src="./static/img/ss-main.png">
@@ -58,14 +58,14 @@ $ ./sigmaShooter
 
 ## API
 
-  `/api/checkConn`              - GET : Return SIEM Connectivity state from the app
-  `/api/upload`                 - POST : Upload Sigma rules from .tar.gz
-  `/api/uploadSingleRule`       - POST : Upload Sigma rule from .yml
-  `/api/download`               - GET : Download Sigma rules loaded in .tar.gz
-  `/api/delete`                 - GET : Delete All sigma rules
-  `/api/deleteRule`             - POST : Delete Sigma rule from id
-  `/api/runRule/{days:int}`     - POST : Run Sigma rule from id
-  `/api/runRule/{days:int}`     - GET : Run All Sigma rules
-  `/api/testRules`              - GET : Test Sigma rules
-  `/api/uploadWinToSiemAndRun`  - POST : Upload Windows Event Logs and Run Sigma rules to them
+* `/api/checkConn`              - GET : Return SIEM Connectivity state from the app
+* `/api/upload`                 - POST : Upload Sigma rules from .tar.gz
+* `/api/uploadSingleRule`       - POST : Upload Sigma rule from .yml
+* `/api/download`               - GET : Download Sigma rules loaded in .tar.gz
+* `/api/delete`                 - GET : Delete All sigma rules
+* `/api/deleteRule`             - POST : Delete Sigma rule from id
+* `/api/runRule/{days:int}`     - POST : Run Sigma rule from id
+* `/api/runRule/{days:int}`     - GET : Run All Sigma rules
+* `/api/testRules`              - GET : Test Sigma rules
+* `/api/uploadWinToSiemAndRun`  - POST : Upload Windows Event Logs and Run Sigma rules to them
 
