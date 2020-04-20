@@ -33,7 +33,7 @@ $ openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
 3. Fill cert names in line 91 of the file `web/router.go`:
 
 <p align="center">
-  <img src="./static/img/ss-router-certs.png">
+  <img src="./static/img/ss-router-certs.PNG">
 </p>
 
 4. Compile the tool:
@@ -53,6 +53,7 @@ $ ./sigmaShooter
 * Repository of Sigma rules: create, move, delete, import, export.
 * Sigma rules Conversion using sigmac and Execution to SIEM. (Graylog in this first version.)
 * Alert Generation on SIEM configured. (Graylog in this first version.)
-* Upload logs to SIEM and Sigma rules Execution to these logs in Upload Logs tab. (Windows Events Logs and Graylog in this first version.)
+* Upload logs to SIEM option and Run Sigma rules to these logs from "Upload Logs" tab. (Windows Events Logs and Graylog in this first version.)
 * API available to automate the follow tasks:
-**`/api/rules/count` : Get rules number
+   `/api/rules/count` : Get rules number
+⋅⋅⋅`/api/rules/count` : Get rules number
