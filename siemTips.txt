@@ -2,7 +2,7 @@
 #	SigmaShooter SIEM Tips File siemTips.txt
 #
 #	For more information:
-#	TODO: copy github link
+#	https://github.com/ppll0p1s/SigmaShooter
 #
 # 	Version - v0.01 - 28/03/2020
 #
