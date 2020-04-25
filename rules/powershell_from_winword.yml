@@ -1,0 +1,35 @@
+# Título
+title: Ejecución de powershell a partir de Word
+# Estado
+status: testing
+# Descripción
+description: Detección de ejecuciones de powershell a partir de documentos Word posiblemente maliciosos
+# Autor
+author: Jose Llopis
+# Fecha de creación
+date: 2020-04-04
+# Identificador de la firma
+id: 1000
+# Clasificación del ataque según la matriz de MITRE ATT&CK: https://attack.mitre.org/matrices/enterprise/
+mitreattack: T1086
+
+# Registro fuente
+logsource:
+      product: windows
+      service: sysmon
+# Detección
+detection:
+      # Primera condición para la deteccción
+      selection: 
+          # Campo EventID de Sysmon sea = 1
+          EventID: 1
+          # Campo Image de Sysmon contenga "powershell.exe"
+          Image:
+              - '*powershell.exe*'
+          # Campo ParentImage de Sysmon contenga "WINWORD.EXE"
+          ParentImage:
+              - '*WINWORD.EXE*'
+      # La consulta debe contemplar las condiciones del campo selection
+      condition: selection
+# Nivel de criticidad de la firma
+level: critical
