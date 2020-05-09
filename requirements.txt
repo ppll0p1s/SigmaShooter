@@ -1,2 +1,13 @@
-# Programs required in SigmaShooter server:
+###
+# Programs required to run SigmaShooter:
+###
+
+# Sigma Converter
+# https://github.com/Neo23x0/sigma
 - sigmac
+
+# Go libraries
+- github.com/gorilla/mux
+- github.com/Devatoria/go-graylog
+- github.com/0xrawsec/golang-evtx/evtx
+- github.com/jeremywohl/flatten
