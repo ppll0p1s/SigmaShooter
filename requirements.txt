@@ -1,5 +1,5 @@
 ###
-# Programs required to run SigmaShooter:
+# Requirements to run SigmaShooter:
 ###
 
 # Sigma Converter
