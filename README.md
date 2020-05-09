@@ -48,7 +48,7 @@ $ ./sigmaShooter
 ```
 7. Enjoy! :)
 
-## Featurs
+## Features
 
 * Repository of Sigma rules: create, move, delete, import, export.
 * Sigma rules Conversion using sigmac and Execution to SIEM. (Graylog in this first version.)
