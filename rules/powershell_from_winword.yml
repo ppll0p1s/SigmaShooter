@@ -25,10 +25,10 @@ detection:
           EventID: 1
           # Campo Image de Sysmon contenga "powershell.exe"
           Image:
-              - '*powershell.exe*'
+              - 'powershell.exe'
           # Campo ParentImage de Sysmon contenga "WINWORD.EXE"
           ParentImage:
-              - '*WINWORD.EXE*'
+              - 'WINWORD.EXE'
       # La consulta debe contemplar las condiciones del campo selection
       condition: selection
 # Nivel de criticidad de la firma
